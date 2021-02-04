@@ -30,3 +30,45 @@ Object.values(qdiv).map(q => {
         }
     })
 })
+
+const vdiv = document.querySelectorAll("div[data-src-type='video']");
+Object.values(vdiv).map(q => {
+    const vslug = q.getAttribute('data-src-id');
+    const vUrl = `https://new-upgrade.toppr.com/api/v6/open/video/${vslug}/`;
+    fetch(vUrl).then(res => res.json()).then(res => {
+        if (res) {
+            const { data = {} } = res;
+            const videoTitle = data.content.title;
+            const videoDuration = data.content.duration;
+            const videoUrl = data.content.languages[0].youtube_url;
+            const videoThumbnail = data.content.thumbnails['640'];
+            q.innerHTML = `
+                <a href=${videoUrl} target='_blank'>
+                <h2>${videoTitle}</h2>
+                <h3>${videoDuration}</h3>
+                <img src='${videoThumbnail}'/>
+                </a>`;
+            // renderMathInElement(q, katexOptions);
+        }
+    })
+})
+
+const sdiv = document.querySelectorAll("div[data-src-type='story']");
+Object.values(sdiv).map(q => {
+    const sslug = q.getAttribute('data-src-id');
+    const sUrl = `https://new-upgrade.toppr.com/api/v6/open/story/${sslug}/`;
+    fetch(sUrl).then(res => res.json()).then(res => {
+        if (res) {
+            const { data = {} } = res;
+            const storyTitle = data.content.title;
+            const storyTime = data.content.read_time;
+            const storyThumbnail = data.content.thumbnail_url.webp["350"];
+            q.innerHTML = `
+                <h2>${storyTitle}</h2>
+                <h3>${storyTime}</h3>
+                <img src='${storyThumbnail}'/>
+                `;
+            // renderMathInElement(q, katexOptions);
+        }
+    })
+})
