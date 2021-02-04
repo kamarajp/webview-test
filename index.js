@@ -1,3 +1,19 @@
+const katexOptions = {
+    delimiters: [
+        { left: '$$', right: '$$', display: false },
+        { left: '\\(', right: '\\)', display: false },
+        { left: '\\[', right: '\\]', display: true }
+    ],
+    mathJaxDelimiters: [
+        { left: '\\matrix{', right: '}', leftReplace: '\\begin{matrix}', rightReplace: '\\end{matrix}' },
+        { left: '\\eqalign{', right: '}', leftReplace: '\\begin{aligned}', rightReplace: '\\end{aligned}' },
+        { left: '^\\left(', right: '\\right)', leftReplace: '^{\\left(', rightReplace: '\\right)}' },
+        { left: '^\\left[', right: '\\right]', leftReplace: '^{\\left[', rightReplace: '\\right]}' },
+        { left: '^\\left\\{', right: '\\right\\}', leftReplace: '^{\\left\\{', rightReplace: '\\right\\}}' },
+        { left: '\\text{', right: '}', leftReplace: '\\text{', rightReplace: '}', textRegex: [{ regex: /\$|\\\$/g, subst: '\\$' }], mathRegex: [{ regex: /\&|\\\&/g, subst: '\\&' }] }, // this must be last
+    ]
+};
+
 const qdiv = document.querySelectorAll("div[data-src-type='question']");
 Object.values(qdiv).map(q => {
     const qslug = q.getAttribute('data-src-id');
@@ -10,21 +26,7 @@ Object.values(qdiv).map(q => {
             q.innerHTML = `
                 <span>${questionData}</span>
                 <span>${answersData}</span>`;
-            renderMathInElement(q, {
-                delimiters: [
-                    { left: '$$', right: '$$', display: false },
-                    { left: '\\(', right: '\\)', display: false },
-                    { left: '\\[', right: '\\]', display: true }
-                ],
-                mathJaxDelimiters: [
-                    { left: '\\matrix{', right: '}', leftReplace: '\\begin{matrix}', rightReplace: '\\end{matrix}' },
-                    { left: '\\eqalign{', right: '}', leftReplace: '\\begin{aligned}', rightReplace: '\\end{aligned}' },
-                    { left: '^\\left(', right: '\\right)', leftReplace: '^{\\left(', rightReplace: '\\right)}' },
-                    { left: '^\\left[', right: '\\right]', leftReplace: '^{\\left[', rightReplace: '\\right]}' },
-                    { left: '^\\left\\{', right: '\\right\\}', leftReplace: '^{\\left\\{', rightReplace: '\\right\\}}' },
-                    { left: '\\text{', right: '}', leftReplace: '\\text{', rightReplace: '}', textRegex: [{ regex: /\$|\\\$/g, subst: '\\$' }], mathRegex: [{ regex: /\&|\\\&/g, subst: '\\&' }] }, // this must be last
-                ]
-            });
+            renderMathInElement(q, katexOptions);
         }
     })
 })
